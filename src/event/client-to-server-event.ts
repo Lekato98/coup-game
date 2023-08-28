@@ -1,6 +1,6 @@
 enum ClientToServerEvent {
-    ACTION = 'ACTION',
-    ALL = '*'
+    GAME_ACTION = 'GAME_ACTION',
+    ANY = '*'
 }
 
 export {

@@ -1,7 +1,8 @@
 import {Server, Socket} from 'socket.io';
-import {Connection, ConnectionId} from './connection.ts';
+import {Connection} from './connection.ts';
 import {SocketIoConnection} from './socket-io-connection.ts';
-import {FpsConnectionManager} from './fps-connection-manager.ts';
+import {ConnectionManager} from './connection-manager.ts';
+import {UserId} from '../user';
 
 enum ServerEvents {
     CONNECTION = 'connection',
@@ -9,26 +10,24 @@ enum ServerEvents {
     DISCONNECTING = 'disconnecting',
 }
 
-
-
 class SocketManager {
-    public constructor(private ioServer: Server, private connectionManager: FpsConnectionManager<any>) {
+    public constructor(private ioServer: Server, private connectionManager: ConnectionManager) {
         this.ioServer.on(ServerEvents.CONNECTION, this.connectionHandler.bind(this));
         this.ioServer.on(ServerEvents.DISCONNECT, this.disconnectHandler.bind(this));
         this.ioServer.on(ServerEvents.DISCONNECTING, this.disconnectingHandler.bind(this));
     }
 
     private connectionHandler(ioClient: Socket) {
-        const connection: Connection = new SocketIoConnection(ioClient.id, ioClient);
+        // @TODO get userId from connection or from header-jwt
+        const userId: UserId = ioClient.id;
+        const connection: Connection = new SocketIoConnection("userId", ioClient);
         this.connectionManager.add(connection);
     }
 
     private disconnectHandler(ioClient: Socket) {
-
     }
 
-    private disconnectingHandler(ioClient: Socket)  {
-
+    private disconnectingHandler(ioClient: Socket) {
     }
 }
 

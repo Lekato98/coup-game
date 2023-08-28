@@ -1,10 +1,7 @@
-import {ConnectionSchema} from '../socket/connection.ts';
 import {Game} from './game.ts';
-import {User, UserId} from './user.ts';
+import {User, UserId} from '../user';
 import {Role} from './role.ts';
-
-class GameSchema extends ConnectionSchema {
-}
+import {ClientToServerEvent, EventManager, ServerToClientEvent} from '../event';
 
 class Message<BodySchema> {
     public userId: UserId;
@@ -19,12 +16,13 @@ class Message<BodySchema> {
     }
 }
 
-
 type GameList = Map<GameId, Game>;
 type UserList = Map<UserId, User>;
 type GameId = string;
+
 class GameManager {
-    constructor() {
+    constructor(private eventManager: EventManager) {
+        this.eventManager.on(ClientToServerEvent.GAME_ACTION, this.action.bind(this));
     }
 
     public create(userId: UserId) {
@@ -41,10 +39,11 @@ class GameManager {
     }
 
     public send(gameId: GameId) {
+        this.eventManager.emit(ServerToClientEvent.GAME_MESSAGE,)
     }
 
     public action(message: Message<any>) {
-        console.log('Received action with message', message);
+        console.info('Received action with message', message);
     }
 }
 
