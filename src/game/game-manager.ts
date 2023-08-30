@@ -1,7 +1,8 @@
-import {Game} from './game.ts';
 import {User, UserId} from '../user';
+import {EventManager} from '../event';
+import {Game} from './game.ts';
 import {Role} from './role.ts';
-import {ClientToServerEvent, EventManager, ServerToClientEvent} from '../event';
+import {ServiceEvent} from '../event/service-event.ts';
 
 class Message<BodySchema> {
     public userId: UserId;
@@ -10,6 +11,7 @@ class Message<BodySchema> {
 
     // @TODO update args
     constructor(...args: any) {
+        console.debug(`Message`, ...args);
         this.userId = args[0];
         this.gameId = args[1];
         this.body = args[2];
@@ -19,10 +21,11 @@ class Message<BodySchema> {
 type GameList = Map<GameId, Game>;
 type UserList = Map<UserId, User>;
 type GameId = string;
-
+// @TODO check if we need to add proxy event handler for the game manager, which will also handle message parsing for GAME_ACTION event
 class GameManager {
     constructor(private eventManager: EventManager) {
-        this.eventManager.on(ClientToServerEvent.GAME_ACTION, this.action.bind(this));
+        // @TODO in case there are no games listed remove the listener, once a new game gets created re-listen to the event back
+        this.eventManager.on(ServiceEvent.GAME_ACTION, this.action.bind(this));
     }
 
     public create(userId: UserId) {
@@ -38,12 +41,17 @@ class GameManager {
     public leave(userId: UserId) {
     }
 
-    public send(gameId: GameId) {
-        this.eventManager.emit(ServerToClientEvent.GAME_MESSAGE,)
+    public emit(gameId: GameId) {
+        // @TODO loop over all active games and send game state
+        this.eventManager.emit(ServiceEvent.SEND_MESSAGE_TO_CLIENT, "userId", {
+            round: 1,
+            cards: [1, 2, 3]
+        });
     }
 
-    public action(message: Message<any>) {
-        console.info('Received action with message', message);
+    public action(userId: UserId, ...args: any[]) {
+        console.info('Received action with args', userId, ...args);
+        this.emit("gameId");
     }
 }
 

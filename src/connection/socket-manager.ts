@@ -1,8 +1,8 @@
 import {Server, Socket} from 'socket.io';
+import {UserId} from '../user';
 import {Connection} from './connection.ts';
 import {SocketIoConnection} from './socket-io-connection.ts';
 import {ConnectionManager} from './connection-manager.ts';
-import {UserId} from '../user';
 
 enum ServerEvents {
     CONNECTION = 'connection',

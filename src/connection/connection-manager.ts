@@ -1,7 +1,8 @@
-import {Connection, ConnectionId} from './connection.ts';
-import {ClientToServerEvent, EventManager, ServerToClientEvent} from '../event';
-import {ConnectionList} from './connection-list.ts';
+import {ClientToServerEvent, EventManager} from '../event';
 import {UserId} from '../user';
+import {Connection, ConnectionId} from './connection.ts';
+import {ConnectionList} from './connection-list.ts';
+import {ServiceEvent} from '../event/service-event.ts';
 
 type UserToConnectionIdMapper = Map<UserId, ConnectionId>;
 
@@ -12,13 +13,15 @@ class ConnectionManager {
     constructor(private readonly eventManager: EventManager) {
         this.connectionList = new ConnectionList();
         this.userToConnectionIdMapper = new Map<UserId, ConnectionId>();
+        this.eventManager.on(ServiceEvent.SEND_MESSAGE_TO_CLIENT, this.send.bind(this));
     }
 
     public add(connection: Connection) {
-        console.log('Adding to connection list', connection.getId());
         // extract required information
         const connectionId: ConnectionId = connection.getId();
         const userId: UserId = connection.getUserId();
+
+        console.info(`[${ConnectionManager.name}] Adding ${connectionId}/${userId} to connection list`);
 
         // attach user and connection
         this.connectionList.set(connectionId, connection);
@@ -39,26 +42,32 @@ class ConnectionManager {
     /**
      * Emitting an event means that we're sending an event on the service level
      * @param event
-     * @param userId
      * @param connectionId
+     * @param userId
      * @param args
      */
-    public emit(event: ClientToServerEvent, userId: UserId, connectionId: ConnectionId, ...args: any) {
-        console.info('Broadcasting events to all listeners');
-        this.eventManager.emit(event, connectionId, args);
+    public emit(event: ClientToServerEvent, connectionId: ConnectionId, userId: UserId, ...args: any) {
+        console.info(`[${ConnectionManager.name}] Received [${connectionId}/${userId}/${event}] event`);
+
+        // @TODO create ClientToServerEvent to ServiceEvent mapper class to handle this logic
+        const serviceEvent = ServiceEvent.GAME_ACTION;
+        console.debug(`[ClientToServerEventToServiceEventMapper] Mapped ${event} event to ${serviceEvent} service-event`);
+
+        console.info(`[${ConnectionManager.name}] Broadcasting [${connectionId}/${userId}/${event}] event to event-manager`);
+        this.eventManager.emit(serviceEvent, userId, event, ...args);
     }
 
     /**
-     * Sending event means that we're sending an event from service level to client
-     * @param event
+     * Sending event means that we're sending a message from service level to client
      * @param userId
      * @param args
      */
-    public send(event: ServerToClientEvent, userId: UserId, ...args: any) {
+    public send(userId: UserId, ...args: any) {
         try {
+            console.debug(userId, args);
             const connectionId = this.userToConnectionIdMapper.get(userId)!!;
             const connection = this.connectionList.get(connectionId)!!;
-            connection.send(event, args);
+            connection.send(args);
         } catch (e) {
             // @TODO create new Error class
             // @TODO check if it's retryable or not so we can handle retries in case of transient issue

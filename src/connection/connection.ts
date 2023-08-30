@@ -6,7 +6,7 @@ type ConnectionId = string;
 type ConnectionPayload = any;
 
 interface Connection {
-    send(event: ServerToClientEvent, payload: ConnectionPayload): void;
+    send(payload: ConnectionPayload): void;
 
     getId(): ConnectionId;
 
