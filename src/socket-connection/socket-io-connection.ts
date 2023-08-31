@@ -1,15 +1,14 @@
 import {Socket} from 'socket.io';
 import {UserId} from '../user';
-import {ClientToServerEvent, ServerToClientEvent} from '../event';
-import {Connection, ConnectionId, ConnectionPayload} from './connection.ts';
-import {ServiceEvent} from '../event/service-event.ts';
+import {ClientToServerEvent} from '../event';
+import {Connection, ConnectionId} from '../connection';
 
 class SocketIoConnection implements Connection {
     constructor(private readonly userId: UserId, private readonly socket: Socket) {
         console.info(`[${SocketIoConnection.name}] Connection constructed for userId: ${userId}`);
     }
 
-    public send(payload: ConnectionPayload) {
+    public send(payload: any) {
         this.socket.send(payload);
     }
 
@@ -21,10 +20,10 @@ class SocketIoConnection implements Connection {
         return this.userId;
     }
 
-    public onAny(cb: (...args: any[]) => void) {
+    public onAny(listener: (...args: any[]) => void) {
         console.info(`[${SocketIoConnection.name}#${this.getId()}/${this.getUserId()}] Initializing [${ClientToServerEvent.ANY}] event`);
-        // @TODO check why socket.io attach and extra arg [a function being added] at the end of the args
-        this.socket.onAny((event, ...args) => cb(event, this.getId(), this.getUserId(), ...args));
+        // @TODO check why socket-connection.io attach and extra arg [a function being added] at the end of the args
+        this.socket.onAny((event, ...args) => listener(event, this.getId(), this.getUserId(), ...args));
         console.info(`[${SocketIoConnection.name}#${this.getId()}/${this.getUserId()}] Is now listening to [${ClientToServerEvent.ANY}] event`);
     }
 }

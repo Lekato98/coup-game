@@ -1,20 +1,9 @@
-import {GameManager} from './game-manager.ts';
-import {Game} from './game.ts';
-import {UserFactory} from './user-factory.ts';
-import {Role} from './role.ts';
-import {Spectator} from './spectator.ts';
-import {Player} from './player.ts';
-import './user.ts';
-
-export {
-    Game,
-    GameManager,
-    // @ts-ignore
-    User,
-    // @ts-ignore
-    UserId,
-    UserFactory,
-    Role,
-    Player,
-    Spectator,
-}
+// Note order matters depends on the dependency relation between the modules
+// e.g. User should be exported before Spectator and Player since both of them extend User
+export * from './game-manager';
+export * from './game';
+export * from './user';
+export * from './user-factory';
+export * from './role';
+export * from './spectator';
+export * from './player';

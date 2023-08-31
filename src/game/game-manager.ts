@@ -1,8 +1,6 @@
+import {Game, Role} from '.';
 import {User, UserId} from '../user';
-import {EventManager} from '../event';
-import {Game} from './game.ts';
-import {Role} from './role.ts';
-import {ServiceEvent} from '../event/service-event.ts';
+import {ServiceEvent, EventManager} from '../event';
 
 class Message<BodySchema> {
     public userId: UserId;
@@ -21,6 +19,7 @@ class Message<BodySchema> {
 type GameList = Map<GameId, Game>;
 type UserList = Map<UserId, User>;
 type GameId = string;
+
 // @TODO check if we need to add proxy event handler for the game manager, which will also handle message parsing for GAME_ACTION event
 class GameManager {
     constructor(private eventManager: EventManager) {

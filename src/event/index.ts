@@ -1,12 +1,6 @@
-import {ClientToServerEvent} from './client-to-server-event.ts';
-import {ServerToClientEvent} from './server-to-client-event.ts';
-import {DefaultEventManager} from './default-event-manager.ts';
-import './event-manager.ts';
+export * from './client-to-server-event.ts';
+export * from './server-to-client-event.ts';
+export * from './default-event-manager.ts';
+export * from './event-manager.ts';
+export * from './service-event.ts';
 
-export {
-    ClientToServerEvent,
-    ServerToClientEvent,
-    DefaultEventManager,
-    // @ts-ignore
-    EventManager
-}

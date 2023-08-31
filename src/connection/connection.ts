@@ -1,9 +1,8 @@
 import {UserId} from '../user';
-import {ServerToClientEvent} from '../event';
 
 type ConnectionId = string;
-
 type ConnectionPayload = any;
+type Listener = (...args: any[]) => void;
 
 interface Connection {
     send(payload: ConnectionPayload): void;
@@ -12,7 +11,7 @@ interface Connection {
 
     getUserId(): UserId;
 
-    onAny(cb: (...args: any[]) => void): void;
+    onAny(listener: Listener): void;
 }
 
 export {

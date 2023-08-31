@@ -1,6 +1,1 @@
-import {User, UserId} from './user.ts';
-
-export {
-    User,
-    UserId
-}
+export * from './user.ts';

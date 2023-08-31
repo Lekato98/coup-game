@@ -1,4 +1,4 @@
-import {User, UserId} from './user.ts';
+import {User, UserId} from '.';
 
 class Player extends User {
     constructor(id: UserId) {

@@ -1,7 +1,4 @@
-import {User, UserId} from './user.ts';
-import {Role} from './role.ts';
-import {Player} from './player.ts';
-import {Spectator} from './spectator.ts';
+import {User, UserId, Role, Player, Spectator} from '.';
 
 class UserFactory {
     public getUser(userId: UserId, role: Role): User {

@@ -3,9 +3,10 @@ import {Server as IOServer} from 'socket.io';
 import {createServer as createHttpServer} from 'http';
 import {EventEmitter} from 'events';
 import config from './config';
-import {ConnectionManager, SocketManager} from './connection';
+import {ConnectionManager} from './connection';
+import {SocketManager} from './socket-connection';
 import {GameManager} from './game';
-import {EventManager, DefaultEventManager} from './event';
+import {DefaultEventManager} from './event';
 
 async function bootstrap() {
     // Initialize express app
@@ -19,7 +20,7 @@ async function bootstrap() {
 
     // Build event manager
     const eventEmitter = new EventEmitter();
-    const eventManager: EventManager = new DefaultEventManager(eventEmitter);
+    const eventManager = new DefaultEventManager(eventEmitter);
 
     // Build connection manager
     const connectionManager = new ConnectionManager(eventManager)
@@ -27,7 +28,7 @@ async function bootstrap() {
     // Build game manager
     const gamaManager = new GameManager(eventManager);
 
-    // Build socket manager
+    // Build socket-connection manager
     const socketManager = new SocketManager(ioServer, connectionManager);
 
     // Start listening to http server

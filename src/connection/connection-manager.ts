@@ -1,9 +1,7 @@
-import {ClientToServerEvent, EventManager} from '../event';
-import {UserId} from '../user';
-import {Connection, ConnectionId} from './connection.ts';
-import {ConnectionList} from './connection-list.ts';
-import {ServiceEvent} from '../event/service-event.ts';
+import {Connection, ConnectionId, ConnectionList} from '.';
+import {ClientToServerEvent, EventManager, ServiceEvent} from '../event';
 
+type UserId = string | number;
 type UserToConnectionIdMapper = Map<UserId, ConnectionId>;
 
 class ConnectionManager {

@@ -1,4 +1,4 @@
-import {Connection, ConnectionId} from './connection.ts';
+import {Connection, ConnectionId} from '.';
 
 class ConnectionList {
     private list: Map<ConnectionId, Connection>

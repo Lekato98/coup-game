@@ -1,7 +1,5 @@
 import {EventEmitter} from 'events';
-import {EventManager} from './event-manager.ts';
-import {ServerToClientEvent} from './server-to-client-event.ts';
-import {ServiceEvent} from './service-event.ts';
+import {ServiceEvent, EventManager} from '.';
 
 class DefaultEventManager implements EventManager {
     constructor(private readonly eventEmitter: EventEmitter) {
