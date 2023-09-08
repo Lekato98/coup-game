@@ -24,8 +24,8 @@
   "license": "ISC",
   "scripts": {
     "start": "bun src/index.ts",
-    "build": "bun build --target=bun --outdir=build --external=socket.io,express .",
-    "start:prod": "bun run ./build/src/index",
+    "build": "bun build.ts",
+    "start:prod": "bun ./build/src/index",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }

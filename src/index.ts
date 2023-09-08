@@ -2,13 +2,14 @@ import express from 'express';
 import {Server as IOServer} from 'socket.io';
 import {createServer as createHttpServer} from 'http';
 import {EventEmitter} from 'events';
-import config from './config';
-import {ConnectionManager} from './connection';
-import {SocketManager} from './socket-connection';
-import {GameManager} from './game';
-import {DefaultEventManager} from './event';
+import config from '@config';
+import {ConnectionManager} from '@connection';
+import {SocketIoManager} from './socket-io-connection';
+import {GameManager} from '@game';
+import {DefaultEventManager} from '@event';
 
 async function bootstrap() {
+    console.info('Bootstrapping app');
     // Initialize express app
     const app = express();
 
@@ -28,8 +29,8 @@ async function bootstrap() {
     // Build game manager
     const gamaManager = new GameManager(eventManager);
 
-    // Build socket-connection manager
-    const socketManager = new SocketManager(ioServer, connectionManager);
+    // Build socket-io-connection manager
+    const socketManager = new SocketIoManager(ioServer, connectionManager);
 
     // Start listening to http server
     httpServer.listen(config.port, () => console.log('Server started @ port', config.port));
