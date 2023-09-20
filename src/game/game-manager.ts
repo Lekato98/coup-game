@@ -1,6 +1,6 @@
 import {Game, Role} from '.';
-import {User, UserId} from '../user';
-import {ServiceEvent, EventManager} from '../event';
+import {User, UserId} from '@user';
+import {ServiceEvent, EventManager} from '@event';
 
 class Message<BodySchema> {
     public userId: UserId;

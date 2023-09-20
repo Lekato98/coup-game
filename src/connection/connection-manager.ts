@@ -1,5 +1,5 @@
 import {Connection, ConnectionId, ConnectionList} from '.';
-import {ClientToServerEvent, EventManager, ServiceEvent} from '../event';
+import {ClientToServerEvent, EventManager, ServiceEvent} from '@event';
 
 type UserId = string | number;
 type UserToConnectionIdMapper = Map<UserId, ConnectionId>;

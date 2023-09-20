@@ -1,4 +1,4 @@
-import {UserId} from '../user';
+import {UserId} from '@user';
 
 type ConnectionId = string;
 type ConnectionPayload = any;

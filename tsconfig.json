@@ -18,6 +18,13 @@
     "noEmit": true,
     "types": [
       "bun-types" // add Bun global
-    ]
+    ],
+    "paths": {
+      "@user": ["./src/user"],
+      "@config": ["./src/config"],
+      "@connection": ["./src/connection"],
+      "@event": ["./src/event"],
+      "@game": ["./src/game"]
+    }
   }
 }
